@@ -308,8 +308,8 @@ const proxyGroups = [
         name: "漏网之鱼",
         type: "select",
         proxies: [
-            "全局直连",
             "节点选择",
+            "全局直连",
             "手动选择",
             "延迟选优",
             "故障转移",
@@ -318,18 +318,7 @@ const proxyGroups = [
     },
     {
         ...groupBaseOption,
-        name: "⛔广告拦截",
-        type: "select",
-        proxies: [
-            "REJECT",
-            "全局直连",
-            "节点选择",
-        ],
-        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Advertising.png",
-    },
-    {
-        ...groupBaseOption,
-        name: "Bing",
+        name: "AI",
         type: "select",
         proxies: [
             "全局直连",
@@ -338,33 +327,7 @@ const proxyGroups = [
             "延迟选优",
             "故障转移",
         ],
-        icon: "https://www.bing.com/favicon.ico",
-    },
-    {
-        ...groupBaseOption,
-        name: "Github",
-        type: "select",
-        proxies: [
-            "节点选择",
-            "手动选择",
-            "全局直连",
-            "延迟选优",
-            "故障转移",
-        ],
-        icon: "https://www.clashverge.dev/assets/icons/github.svg",
-    },
-    {
-        ...groupBaseOption,
-        name: "谷歌服务",
-        type: "select",
-        proxies: [
-            "节点选择",
-            "手动选择",
-            "全局直连",
-            "延迟选优",
-            "故障转移",
-        ],
-        icon: "https://www.clashverge.dev/assets/icons/google.svg",
+        icon: "https://www.clashverge.dev/assets/icons/chatgpt.svg",
     },
     {
         ...groupBaseOption,
@@ -407,7 +370,7 @@ const proxyGroups = [
     },
     {
         ...groupBaseOption,
-        name: "AI",
+        name: "Bing",
         type: "select",
         proxies: [
             "全局直连",
@@ -416,7 +379,33 @@ const proxyGroups = [
             "延迟选优",
             "故障转移",
         ],
-        icon: "https://www.clashverge.dev/assets/icons/chatgpt.svg",
+        icon: "https://www.bing.com/favicon.ico",
+    },
+    {
+        ...groupBaseOption,
+        name: "Github",
+        type: "select",
+        proxies: [
+            "节点选择",
+            "手动选择",
+            "全局直连",
+            "延迟选优",
+            "故障转移",
+        ],
+        icon: "https://www.clashverge.dev/assets/icons/github.svg",
+    },
+    {
+        ...groupBaseOption,
+        name: "谷歌服务",
+        type: "select",
+        proxies: [
+            "节点选择",
+            "手动选择",
+            "全局直连",
+            "延迟选优",
+            "故障转移",
+        ],
+        icon: "https://www.clashverge.dev/assets/icons/google.svg",
     },
     {
         ...groupBaseOption,
@@ -504,8 +493,8 @@ const proxyGroups = [
         name: "游戏服务",
         type: "select",
         proxies: [
-            "全局直连",
             "节点选择",
+            "全局直连",
             "手动选择",
             "延迟选优",
             "故障转移",
@@ -528,7 +517,10 @@ const proxyGroups = [
         ...groupBaseOption,
         name: "网速测试",
         type: "select",
-        proxies: ["全局直连",],
+        proxies: [
+            "全局直连",
+            "手动选择",
+        ],
         "include-all": true,
         icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png",
     },
@@ -575,6 +567,17 @@ const proxyGroups = [
         tolerance: test_tolerance,
         "include-all": true,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg",
+    },
+    {
+        ...groupBaseOption,
+        name: "⛔广告拦截",
+        type: "select",
+        proxies: [
+            "REJECT",
+            "全局直连",
+            "节点选择",
+        ],
+        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Advertising.png",
     },
 ];
 
