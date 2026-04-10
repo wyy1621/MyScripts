@@ -321,8 +321,8 @@ const proxyGroups = [
         name: "AI",
         type: "select",
         proxies: [
-            "全局直连",
             "节点选择",
+            "全局直连",
             "手动选择",
             "延迟选优",
             "故障转移",
