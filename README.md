@@ -2,6 +2,15 @@
 
 自己写的或者魔改的各种脚本
 
+### Clash拓展脚本:
+用于覆写Clash配置文件，自定义规则
+
+Clash Verge: 点击订阅，右键点击右下角全局扩展脚本, 编辑文件，添加以下脚本内容
+
+Sub-Store: 文件-添加mihomo文件-脚本操作-添加链接
+```
+https://raw.githubusercontent.com/wyy1621/MyScripts/refs/heads/main/ClashExtend.js
+```
 
 
 ### TraceRoute脚本安装:
@@ -37,7 +46,7 @@ for (var i = 1; i <= 5; i++) {
 apt install chromium-browser chromium-chromedriver
 ```
 
-安装speedtest-x(docker版，接管80端口)
+### 安装speedtest-x(docker版，接管80端口)
 ```
 docker pull badapple9/speedtest-x
 ```
