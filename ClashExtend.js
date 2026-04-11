@@ -326,13 +326,6 @@ const proxyGroups = [
     },
     {
         ...groupBaseOption,
-        name: selfHostedProxyGroupName,
-        type: "select",
-        proxies: [],
-        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/World_Map.png",
-    },
-    {
-        ...groupBaseOption,
         name: "漏网之鱼",
         type: "select",
         proxies: [
@@ -797,9 +790,6 @@ function upsertSelfHostedProxyGroup(config) {
     const entries = config["proxy-groups"];
     if (!Array.isArray(entries)) return;
 
-    const existingGroupIndex = entries.findIndex(entry => entry?.name === selfHostedProxyGroupName);
-    if (existingGroupIndex < 0) return;
-
     let matchedProxyNames = [];
     if (Array.isArray(config.proxies)) {
         matchedProxyNames = config.proxies
@@ -812,23 +802,19 @@ function upsertSelfHostedProxyGroup(config) {
         matchedProxyNames = [...new Set(matchedProxyNames)];
     }
 
-    const existingGroup = entries[existingGroupIndex];
-    existingGroup.proxies = matchedProxyNames;
+    if (matchedProxyNames.length === 0) return;
 
-    if (matchedProxyNames.length === 0 && typeof config["proxy-providers"] === "object" && config["proxy-providers"] !== null) {
-        const providers = Object.keys(config["proxy-providers"]);
-        if (providers.length > 0) {
-            existingGroup.use = providers;
-            existingGroup.filter = "WYY|自建";
-        }
-    }
+    const selfHostedGroup = {
+        ...groupBaseOption,
+        name: selfHostedProxyGroupName,
+        type: "select",
+        proxies: matchedProxyNames,
+        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/World_Map.png",
+    };
 
-    config["proxy-groups"] = entries;
-}
-
-function setSelfHostedAsDefaultForAI(config) {
-    const entries = config["proxy-groups"];
-    if (!Array.isArray(entries)) return;
+    const manualSelectIndex = entries.findIndex(entry => entry?.name === "手动选择");
+    const insertIndex = manualSelectIndex >= 0 ? manualSelectIndex + 1 : 0;
+    entries.splice(insertIndex, 0, selfHostedGroup);
 
     const aiGroups = new Set(["OpenAI", "Claude", "Gemini"]);
     for (const entry of entries) {
@@ -837,6 +823,8 @@ function setSelfHostedAsDefaultForAI(config) {
         entry.proxies = entry.proxies.filter(name => name !== selfHostedProxyGroupName);
         entry.proxies.unshift(selfHostedProxyGroupName);
     }
+
+    config["proxy-groups"] = entries;
 }
 
 // 添加地区分组
@@ -978,8 +966,6 @@ function main(config) {
     config["proxy-groups"] = proxyGroups;
     // 自建落地分组
     upsertSelfHostedProxyGroup(config);
-    // OpenAI/Claude/Gemini 默认走自建落地
-    setSelfHostedAsDefaultForAI(config);
     // 地区分组
     addRegions(config);
     // 返回修改后的配置
