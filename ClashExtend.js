@@ -326,6 +326,13 @@ const proxyGroups = [
     },
     {
         ...groupBaseOption,
+        name: selfHostedProxyGroupName,
+        type: "select",
+        proxies: [],
+        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/World_Map.png",
+    },
+    {
+        ...groupBaseOption,
         name: "漏网之鱼",
         type: "select",
         proxies: [
@@ -550,13 +557,6 @@ const proxyGroups = [
             "故障转移",
         ],
         icon: "https://www.clashverge.dev/assets/icons/steam.svg",
-    },
-    {
-        ...groupBaseOption,
-        name: selfHostedProxyGroupName,
-        type: "select",
-        proxies: [],
-        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/World_Map.png",
     },
     {
         ...groupBaseOption,
@@ -806,6 +806,7 @@ function upsertSelfHostedProxyGroup(config) {
             .filter(proxy => isSelfHostedProxyName(proxy?.name))
             .map(proxy => {
                 proxy["dialer-proxy"] = selfHostedProxyForwardGroupName;
+                proxy.hidden = true;
                 return proxy.name;
             });
         matchedProxyNames = [...new Set(matchedProxyNames)];
@@ -918,7 +919,7 @@ function addRegions(config) {
             }
         } else if (entry.name === "全局直连") {
             entry.proxies.push("地区选择");
-        } else if (entry.type === "select" && !entry.hasOwnProperty("include-all")) {
+        } else if (entry.name !== selfHostedProxyGroupName && entry.type === "select" && !entry.hasOwnProperty("include-all")) {
             entry.proxies.push(...regions)
         }
     }
