@@ -342,7 +342,6 @@ const proxyGroups = [
         name: "OpenAI",
         type: "select",
         proxies: [
-            selfHostedProxyGroupName,
             "节点选择",
             "全局直连",
             "手动选择",
@@ -356,7 +355,6 @@ const proxyGroups = [
         name: "Claude",
         type: "select",
         proxies: [
-            selfHostedProxyGroupName,
             "节点选择",
             "全局直连",
             "手动选择",
@@ -370,7 +368,6 @@ const proxyGroups = [
         name: "Gemini",
         type: "select",
         proxies: [
-            selfHostedProxyGroupName,
             "节点选择",
             "全局直连",
             "手动选择",
