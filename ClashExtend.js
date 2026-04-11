@@ -38,6 +38,10 @@ const groupBaseOption = {
     "disable-udp": false,
 };
 
+const selfHostedProxyGroupName = "自建落地";
+const selfHostedProxyForwardGroupName = "手动选择";
+const selfHostedProxyNamePattern = /WYY|自建/i;
+
 // 代理规则
 const rules = [
     // 自定义规则
@@ -338,6 +342,7 @@ const proxyGroups = [
         name: "OpenAI",
         type: "select",
         proxies: [
+            selfHostedProxyGroupName,
             "节点选择",
             "全局直连",
             "手动选择",
@@ -351,6 +356,7 @@ const proxyGroups = [
         name: "Claude",
         type: "select",
         proxies: [
+            selfHostedProxyGroupName,
             "节点选择",
             "全局直连",
             "手动选择",
@@ -364,6 +370,7 @@ const proxyGroups = [
         name: "Gemini",
         type: "select",
         proxies: [
+            selfHostedProxyGroupName,
             "节点选择",
             "全局直连",
             "手动选择",
@@ -543,6 +550,13 @@ const proxyGroups = [
             "故障转移",
         ],
         icon: "https://www.clashverge.dev/assets/icons/steam.svg",
+    },
+    {
+        ...groupBaseOption,
+        name: selfHostedProxyGroupName,
+        type: "select",
+        proxies: [],
+        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/World_Map.png",
     },
     {
         ...groupBaseOption,
@@ -775,6 +789,55 @@ function normalizeNameForRegionMatch(name) {
     return String(name || "").replace(/IEPL|IPLC/gi, "");
 }
 
+function isSelfHostedProxyName(name) {
+    return selfHostedProxyNamePattern.test(String(name || ""));
+}
+
+function upsertSelfHostedProxyGroup(config) {
+    const entries = config["proxy-groups"];
+    if (!Array.isArray(entries)) return;
+
+    const existingGroupIndex = entries.findIndex(entry => entry?.name === selfHostedProxyGroupName);
+    if (existingGroupIndex < 0) return;
+
+    let matchedProxyNames = [];
+    if (Array.isArray(config.proxies)) {
+        matchedProxyNames = config.proxies
+            .filter(proxy => isSelfHostedProxyName(proxy?.name))
+            .map(proxy => {
+                proxy["dialer-proxy"] = selfHostedProxyForwardGroupName;
+                return proxy.name;
+            });
+        matchedProxyNames = [...new Set(matchedProxyNames)];
+    }
+
+    const existingGroup = entries[existingGroupIndex];
+    existingGroup.proxies = matchedProxyNames;
+
+    if (matchedProxyNames.length === 0 && typeof config["proxy-providers"] === "object" && config["proxy-providers"] !== null) {
+        const providers = Object.keys(config["proxy-providers"]);
+        if (providers.length > 0) {
+            existingGroup.use = providers;
+            existingGroup.filter = "WYY|自建";
+        }
+    }
+
+    config["proxy-groups"] = entries;
+}
+
+function setSelfHostedAsDefaultForAI(config) {
+    const entries = config["proxy-groups"];
+    if (!Array.isArray(entries)) return;
+
+    const aiGroups = new Set(["OpenAI", "Claude", "Gemini"]);
+    for (const entry of entries) {
+        if (!entry || !aiGroups.has(entry.name)) continue;
+        if (!Array.isArray(entry.proxies)) continue;
+        entry.proxies = entry.proxies.filter(name => name !== selfHostedProxyGroupName);
+        entry.proxies.unshift(selfHostedProxyGroupName);
+    }
+}
+
 // 添加地区分组
 function addRegions(config) {
     let regions = [];
@@ -912,6 +975,10 @@ function main(config) {
     config["rules"] = rules;
     // 代理组
     config["proxy-groups"] = proxyGroups;
+    // 自建落地分组
+    upsertSelfHostedProxyGroup(config);
+    // OpenAI/Claude/Gemini 默认走自建落地
+    setSelfHostedAsDefaultForAI(config);
     // 地区分组
     addRegions(config);
     // 返回修改后的配置
