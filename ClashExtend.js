@@ -51,6 +51,7 @@ const rules = [
     "RULE-SET,ipdirect,全局直连,no-resolve",
     "RULE-SET,ipprivate,全局直连,no-resolve",
     "RULE-SET,telegram,电报消息,no-resolve",
+    "RULE-SET,telegramcidr,电报消息,no-resolve",
     "RULE-SET,direct,全局直连",
     "RULE-SET,private,全局直连",
     "RULE-SET,openai,OpenAI",
@@ -233,6 +234,12 @@ const ruleProviders = {
         behavior: "domain",
         url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs",
         path: "./ruleset/telegram.mrs",
+    },
+    telegramcidr: {
+        ...ruleProviderCommon,
+        behavior: "ipcidr",
+        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs",
+        path: "./ruleset/telegramcidr.mrs",
     },
     proxy: {
         ...ruleProviderCommon,
