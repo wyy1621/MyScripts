@@ -182,7 +182,7 @@ const ruleProviders = {
     },
     netflix_ip: {
         ...ruleProviderCommon,
-        behavior: "domain",
+        behavior: "ipcidr",
         url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/netflix.mrs",
         path: "./ruleset/netflix-ip.mrs",
     },
