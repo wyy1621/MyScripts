@@ -50,7 +50,7 @@ const rules = [
     "RULE-SET,reject,⛔广告拦截",
     "RULE-SET,ipdirect,全局直连,no-resolve",
     "RULE-SET,ipprivate,全局直连,no-resolve",
-    "RULE-SET,telegramcidr,电报消息,no-resolve",
+    "RULE-SET,telegram,电报消息,no-resolve",
     "RULE-SET,direct,全局直连",
     "RULE-SET,private,全局直连",
     "RULE-SET,openai,OpenAI",
@@ -182,8 +182,8 @@ const ruleProviders = {
     },
     netflix_ip: {
         ...ruleProviderCommon,
-        behavior: "ipcidr",
-        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/netflix.mrs",
+        behavior: "domain",
+        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/netflix.mrs",
         path: "./ruleset/netflix-ip.mrs",
     },
     netflix_site: {
@@ -228,11 +228,11 @@ const ruleProviders = {
         url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs",
         path: "./ruleset/games.mrs",
     },
-    telegramcidr: {
+    telegram: {
         ...ruleProviderCommon,
-        behavior: "ipcidr",
+        behavior: "domain",
         url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs",
-        path: "./ruleset/telegramcidr.mrs",
+        path: "./ruleset/telegram.mrs",
     },
     proxy: {
         ...ruleProviderCommon,
