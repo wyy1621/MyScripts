@@ -183,7 +183,7 @@ const ruleProviders = {
     netflix_ip: {
         ...ruleProviderCommon,
         behavior: "ipcidr",
-        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/netflix.mrs",
+        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/netflix.mrs",
         path: "./ruleset/netflix-ip.mrs",
     },
     netflix_site: {
@@ -231,7 +231,7 @@ const ruleProviders = {
     telegramcidr: {
         ...ruleProviderCommon,
         behavior: "ipcidr",
-        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs",
+        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs",
         path: "./ruleset/telegramcidr.mrs",
     },
     proxy: {
