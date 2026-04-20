@@ -75,7 +75,7 @@ const rules = [
     "RULE-SET,bilibili,Bilibili",
     "RULE-SET,proxy,节点选择",
     "RULE-SET,gfw,节点选择",
-    "RULE-SET,tld-not-cn,节点选择",
+    // "RULE-SET,tld-not-cn,节点选择",
     // 未匹配的规则
     "MATCH,漏网之鱼",
 ];
@@ -253,12 +253,12 @@ const ruleProviders = {
         url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gfw.mrs",
         path: "./ruleset/gfw.mrs",
     },
-    "tld-not-cn": {
-        ...ruleProviderCommon,
-        behavior: "domain",
-        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tld-!cn.mrs",
-        path: "./ruleset/tld-not-cn.mrs",
-    },
+    // "tld-not-cn": {
+    //     ...ruleProviderCommon,
+    //     behavior: "domain",
+    //     url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tld-!cn.mrs",
+    //     path: "./ruleset/tld-not-cn.mrs",
+    // },
 };
 
 
