@@ -3,6 +3,7 @@ const customRules = [
     // 在此添加自定义代理规则。
     // 例如：
     //"DOMAIN-SUFFIX,gstatic.com,节点选择",
+    "DOMAIN-KEYWORD,wangyuye,自己域名",
 ];
 
 // 默认测试网址
@@ -329,6 +330,19 @@ const proxyGroups = [
         name: "手动选择",
         type: "select",
         "include-all": true,
+        icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg",
+    },
+    {
+        ...groupBaseOption,
+        name: "自己域名",
+        type: "select",
+        proxies: [
+            "节点选择",
+            "全局直连",
+            "手动选择",
+            "延迟选优",
+            "故障转移",
+        ],
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg",
     },
     {
