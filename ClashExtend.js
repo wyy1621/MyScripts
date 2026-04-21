@@ -3,7 +3,7 @@ const customRules = [
     // 在此添加自定义代理规则。
     // 例如：
     //"DOMAIN-SUFFIX,gstatic.com,节点选择",
-    "DOMAIN-KEYWORD,wangyuye,自己域名",
+    "DOMAIN-SUFFIX,wangyuye.cc,自己域名",
 ];
 
 // 默认测试网址
@@ -337,8 +337,8 @@ const proxyGroups = [
         name: "自己域名",
         type: "select",
         proxies: [
-            "节点选择",
             "全局直连",
+            "节点选择",
             "手动选择",
             "延迟选优",
             "故障转移",
