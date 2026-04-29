@@ -4,6 +4,7 @@ const customRules = [
     // 例如：
     //"DOMAIN-SUFFIX,gstatic.com,节点选择",
     "DOMAIN-SUFFIX,wangyuye.cc,自己域名",
+    "DOMAIN-KEYWORD,googleapis,谷歌服务",
 ];
 
 // 默认测试网址
