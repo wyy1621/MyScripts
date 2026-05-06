@@ -328,7 +328,7 @@ const proxyGroups = [
         proxies: [],
         include: subscriptionInfoPattern,
         "include-all": false,
-        icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/info.svg",
+        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Airport.png",
     },
     {
         ...groupBaseOption,
