@@ -323,15 +323,6 @@ const subscriptionInfoPattern = "套餐|到期|有效|剩余|版本|已用|过�
 const proxyGroups = [
     {
         ...groupBaseOption,
-        name: "订阅信息",
-        type: "select",
-        proxies: [],
-        include: subscriptionInfoPattern,
-        "include-all": false,
-        icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Airport.png",
-    },
-    {
-        ...groupBaseOption,
         name: "节点选择",
         type: "select",
         proxies: ["延迟选优", "手动选择", "故障转移", "负载均衡(散列)", "负载均衡(轮询)"],
@@ -342,7 +333,6 @@ const proxyGroups = [
         name: "手动选择",
         type: "select",
         "include-all": true,
-        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg",
     },
     {
@@ -603,7 +593,6 @@ const proxyGroups = [
             "手动选择",
         ],
         "include-all": true,
-        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png",
     },
     {
@@ -612,7 +601,6 @@ const proxyGroups = [
         type: "load-balance",
         strategy: "round-robin",
         "include-all": true,
-        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/balance.svg",
     },
     {
@@ -621,7 +609,6 @@ const proxyGroups = [
         type: "load-balance",
         strategy: "consistent-hashing",
         "include-all": true,
-        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/merry_go.svg",
     },
     {
@@ -629,7 +616,6 @@ const proxyGroups = [
         name: "故障转移",
         type: "fallback",
         "include-all": true,
-        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg",
     },
     {
@@ -651,7 +637,6 @@ const proxyGroups = [
         interval: test_interval,
         tolerance: test_tolerance,
         "include-all": true,
-        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg",
     },
     {
@@ -943,7 +928,7 @@ function addRegions(config) {
             }
         } else if (entry.name === "全局直连") {
             entry.proxies.push("地区选择");
-        } else if (entry.name !== selfHostedProxyGroupName && entry.type === "select" && !entry.hasOwnProperty("include-all")) {
+        } else if (entry.name !== selfHostedProxyGroupName && entry.name !== "订阅信息" && entry.type === "select" && !entry.hasOwnProperty("include-all")) {
             entry.proxies.push(...regions)
         }
     }
@@ -1000,28 +985,59 @@ function main(config) {
     config["rules"] = rules;
     // 代理组
     config["proxy-groups"] = proxyGroups;
-    // 将运行时代理列表中符合订阅信息正则的节点填充到 "订阅信息" 分组
-    try {
+
+    // --- 【严格的订阅信息节点隔离逻辑】 ---
+    const allProxies = config.proxies || [];
+    let subProxies = [];
+    let otherProxies = [];
+    
+    if (allProxies.length > 0) {
         const subRegex = new RegExp(subscriptionInfoPattern, "i");
-        if (Array.isArray(config.proxies)) {
-            const allNames = config.proxies.map(p => p.name).filter(Boolean);
-            const matched = allNames.filter(n => subRegex.test(n));
-            const entries = config["proxy-groups"] || [];
-            const subEntry = entries.find(e => e && e.name === "订阅信息");
-            if (subEntry) {
-                subEntry.proxies = matched;
-                // 保持 include 字段以供前端识别，但实际 proxies 已填充
-                subEntry.include = subscriptionInfoPattern;
-                subEntry["include-all"] = false;
+        subProxies = allProxies.filter(p => subRegex.test(p.name));
+        otherProxies = allProxies.filter(p => !subRegex.test(p.name));
+        
+        // **关键点1：从全局节点池中临时移除订阅节点**
+        // 这样后续的 addRegions 等任何逻辑即使遍历 config.proxies 也绝对看不到这些节点。
+        config.proxies = otherProxies;
+    }
+
+    const subGroupNames = subProxies.map(p => p.name);
+    const otherGroupNames = otherProxies.map(p => p.name);
+
+    if (config["proxy-groups"]) {
+        // 在第一位插入真正的订阅信息分组
+        config["proxy-groups"].unshift({
+            ...groupBaseOption,
+            name: "订阅信息",
+            type: "select",
+            proxies: subGroupNames.length > 0 ? subGroupNames : ["DIRECT"],
+            icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Airport.png",
+        });
+
+        // **关键点2：将剩下所有包含 include-all:true 的分组展开成具体的剩余节点，并删除该属性**
+        // 防止 Clash Verge/Meta 内部自动展开时又把订阅节点拉进去（比如我们虽然上面改了config.proxies，
+        // 但如果 Verge 在脚本返回后用原始节点列表展开 include-all，仍会出问题）
+        if (allProxies.length > 0) {
+            for (const group of config["proxy-groups"]) {
+                if (group.name !== "订阅信息" && group["include-all"]) {
+                    delete group["include-all"];
+                    const existProxies = Array.isArray(group.proxies) ? group.proxies : [];
+                    group.proxies = [...existProxies, ...otherGroupNames];
+                }
             }
         }
-    } catch (e) {
-        // ignore errors here, 不要阻塞主流程
     }
-    // 自建落地分组
+
+    // 自建落地分组 (此时它只会用 otherProxies)
     upsertSelfHostedProxyGroup(config);
-    // 地区分组
+    // 地区分组 (此时它只会用 otherProxies 生成地区)
     addRegions(config);
+
+    // 恢复完整的 config.proxies 给 Clash 内核使用
+    if (allProxies.length > 0) {
+        config.proxies = allProxies;
+    }
+
     // 返回修改后的配置
     return config;
 }
