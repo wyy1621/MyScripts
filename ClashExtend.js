@@ -928,7 +928,7 @@ function addRegions(config) {
             }
         } else if (entry.name === "全局直连") {
             entry.proxies.push("地区选择");
-        } else if (entry.name !== selfHostedProxyGroupName && entry.name !== "订阅信息" && entry.type === "select" && !entry.hasOwnProperty("include-all")) {
+        } else if (entry.name !== selfHostedProxyGroupName && entry.name !== "订阅信息" && entry.name !== "手动选择" && entry.type === "select" && !entry.hasOwnProperty("include-all")) {
             entry.proxies.push(...regions)
         }
     }
