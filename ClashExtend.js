@@ -327,6 +327,7 @@ const proxyGroups = [
         type: "select",
         proxies: [],
         include: subscriptionInfoPattern,
+        "include-all": false,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/info.svg",
     },
     {
@@ -999,6 +1000,24 @@ function main(config) {
     config["rules"] = rules;
     // 代理组
     config["proxy-groups"] = proxyGroups;
+    // 将运行时代理列表中符合订阅信息正则的节点填充到 "订阅信息" 分组
+    try {
+        const subRegex = new RegExp(subscriptionInfoPattern, "i");
+        if (Array.isArray(config.proxies)) {
+            const allNames = config.proxies.map(p => p.name).filter(Boolean);
+            const matched = allNames.filter(n => subRegex.test(n));
+            const entries = config["proxy-groups"] || [];
+            const subEntry = entries.find(e => e && e.name === "订阅信息");
+            if (subEntry) {
+                subEntry.proxies = matched;
+                // 保持 include 字段以供前端识别，但实际 proxies 已填充
+                subEntry.include = subscriptionInfoPattern;
+                subEntry["include-all"] = false;
+            }
+        }
+    } catch (e) {
+        // ignore errors here, 不要阻塞主流程
+    }
     // 自建落地分组
     upsertSelfHostedProxyGroup(config);
     // 地区分组
