@@ -318,7 +318,16 @@ const regionConfig = [
 ];
 
 // 显示节点配置
+const subscriptionInfoPattern = "套餐|到期|有效|剩余|版本|已用|过期|失联|测试|官方|网址|备用|群|TEST|客服|网站|获取|订阅|流量|机场|下次|官址|官网|联系|邮箱|工单|学术|USE|USED|TOTAL|EXPIRE|EMAIL";
+
 const proxyGroups = [
+    {
+        ...groupBaseOption,
+        name: "订阅信息",
+        type: "select",
+        include: subscriptionInfoPattern,
+        icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/info.svg",
+    },
     {
         ...groupBaseOption,
         name: "节点选择",
@@ -331,6 +340,7 @@ const proxyGroups = [
         name: "手动选择",
         type: "select",
         "include-all": true,
+        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg",
     },
     {
@@ -591,6 +601,7 @@ const proxyGroups = [
             "手动选择",
         ],
         "include-all": true,
+        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png",
     },
     {
@@ -599,6 +610,7 @@ const proxyGroups = [
         type: "load-balance",
         strategy: "round-robin",
         "include-all": true,
+        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/balance.svg",
     },
     {
@@ -607,6 +619,7 @@ const proxyGroups = [
         type: "load-balance",
         strategy: "consistent-hashing",
         "include-all": true,
+        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/merry_go.svg",
     },
     {
@@ -614,6 +627,7 @@ const proxyGroups = [
         name: "故障转移",
         type: "fallback",
         "include-all": true,
+        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg",
     },
     {
@@ -635,6 +649,7 @@ const proxyGroups = [
         interval: test_interval,
         tolerance: test_tolerance,
         "include-all": true,
+        exclude: subscriptionInfoPattern,
         icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg",
     },
     {
