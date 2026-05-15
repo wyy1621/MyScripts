@@ -1046,6 +1046,23 @@ function main(config) {
         config.proxies = allProxies;
     }
 
+    // 调整最终输出的配置顺序（让全局配置在前，proxies等大型数组在后）
+    const finalConfig = {};
+    const bottomKeys = ["proxies", "proxy-groups", "proxy-providers", "rule-providers", "rules"];
+    
+    // 先写入非 bottomKeys 的所有属性 (全局配置等)
+    for (const key in config) {
+        if (!bottomKeys.includes(key)) {
+            finalConfig[key] = config[key];
+        }
+    }
+    // 最后写入 bottomKeys，使其排在 YAML 文件末尾
+    for (const key of bottomKeys) {
+        if (config[key] !== undefined) {
+            finalConfig[key] = config[key];
+        }
+    }
+
     // 返回修改后的配置
-    return config;
+    return finalConfig;
 }
