@@ -964,6 +964,9 @@ function main(config) {
     config["log-level"] = "info";
     config["ipv6"] = false;
     config["find-process-mode"] = "strict";
+    config["external-controller"] = ":9090";
+    config["external-ui"] = "ui";
+    config["external-ui-url"] = "https://gh.wangyuye.cc/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip";
 
     // 配置
     config["profile"] = {
