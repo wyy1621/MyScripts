@@ -957,6 +957,14 @@ function main(config) {
         throw new Error("配置文件中未找到任何代理");
     }
 
+    // 全局配置
+    config["mixed-port"] = 7890;
+    config["allow-lan"] = true;
+    config["mode"] = "rule";
+    config["log-level"] = "info";
+    config["ipv6"] = false;
+    config["find-process-mode"] = "strict";
+
     // 配置
     config["profile"] = {
         "store-selected": true,
