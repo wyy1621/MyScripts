@@ -7,6 +7,16 @@ const customRules = [
     "DOMAIN-KEYWORD,googleapis,谷歌服务",
 ];
 
+const jetBrainsRules = [
+    "DOMAIN,api.jetbrains.ai,JetBrains",
+    "DOMAIN,api.ai.jetbrains.com.cn,JetBrains",
+    "DOMAIN,api.app.prod.grazie.aws.intellij.net,JetBrains",
+    "DOMAIN-SUFFIX,prod.grazie.aws.intellij.net,JetBrains",
+    "DOMAIN,account.jetbrains.com,JetBrains",
+    "DOMAIN,oauth.account.jetbrains.com,JetBrains",
+    "DOMAIN,www.jetbrains.com,JetBrains",
+];
+
 // 默认测试网址
 const test_url = "https://www.google.com/generate_204";
 // 测试网址检测间隔
@@ -48,6 +58,7 @@ const selfHostedProxyNamePattern = /WYY|自建/i;
 const rules = [
     // 自定义规则
     ...customRules,
+    ...jetBrainsRules,
     // 规则集
     "RULE-SET,reject,⛔广告拦截",
     "RULE-SET,ipdirect,全局直连,no-resolve",
@@ -399,6 +410,19 @@ const proxyGroups = [
             "故障转移",
         ],
         icon: "https://www.clashverge.dev/assets/icons/google.svg",
+    },
+    {
+        ...groupBaseOption,
+        name: "JetBrains",
+        type: "select",
+        proxies: [
+            "节点选择",
+            "全局直连",
+            "手动选择",
+            "延迟选优",
+            "故障转移",
+        ],
+        icon: "https://cfproxy.wangyuye.cc/down/https://www.jetbrains.com/favicon.ico",
     },
     {
         ...groupBaseOption,
