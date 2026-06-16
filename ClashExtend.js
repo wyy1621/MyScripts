@@ -14,6 +14,7 @@ const jetBrainsRules = [
     "DOMAIN-SUFFIX,prod.grazie.aws.intellij.net,JetBrains",
     "DOMAIN,account.jetbrains.com,JetBrains",
     "DOMAIN,oauth.account.jetbrains.com,JetBrains",
+    "DOMAIN,resources.jetbrains.com,JetBrains",
     "DOMAIN,www.jetbrains.com,JetBrains",
 ];
 
